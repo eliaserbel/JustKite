@@ -1,7 +1,7 @@
 const axios = require("axios");
 const HttpError = require("../models/error");
 require("dotenv").config();
-const API_KEY = "AIzaSyBi0R8sxkL7YhcCwnJinC2OM8TNQwn70i4";
+const API_KEY = process.env.GOOGLEGEO_API;
 
 async function getCoordinatesForKitespot(address) {
   const response = await axios.get(

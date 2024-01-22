@@ -5,9 +5,13 @@ const mongoose = require("mongoose");
 const kiteSpotsRoutes = require("./routes/kiteSpot-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/error");
+const cors = require("cors");
 
 // express app
 const app = express();
+
+// cors
+app.use(cors());
 
 // Port
 const PORT = process.env.PORT || 3000;
