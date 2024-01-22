@@ -1,34 +1,50 @@
 require("dotenv").config();
-
 const express = require("express");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const kiteSpotRoutes = require("./routes/kiteSpot");
+const kiteSpotsRoutes = require("./routes/kiteSpot-routes");
+const usersRoutes = require("./routes/users-routes");
+const HttpError = require("./models/error");
 
 // express app
 const app = express();
 
+// Port
 const PORT = process.env.PORT || 3000;
-
-// port
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
 
 // connect to db
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
   })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
+  .catch((err) => {
+    console.log(err);
   });
 
-// middleware
+//middleware
 app.use(express.json());
 
+//Body-Parser
+app.use(bodyParser.json());
+
 // routes
-app.use("/api/workouts", kiteSpotRoutes);
+app.use("/api/kiteSpots", kiteSpotsRoutes);
+app.use("/api/users", usersRoutes);
+
+// error Handling
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
+});
+
+// error Handling
+app.use((error, req, res, next) => {
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occurred!" });
+});
