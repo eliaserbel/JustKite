@@ -4,6 +4,9 @@ const { check } = require("express-validator");
 
 const kiteSpotsController = require("../controllers/kiteSpot-controller");
 
+//get all Kitespots
+router.get("/", kiteSpotsController.getKiteSpots);
+
 //get a Kitespot by ID
 router.get("/:sid", kiteSpotsController.getKiteSpotByID);
 

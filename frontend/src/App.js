@@ -1,23 +1,32 @@
-import axios from "axios";
-import React from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 
-const URL = "http://localhost:4000/api/kiteSpots/65ad9366509ebc2b7dd2d9d8";
+// pages & components
+import Home from "./pages/Home";
+import CreateKiteSpot from "./pages/CreateKiteSpot";
+import LogIn from "./pages/LogIn";
 
-export default function App() {
-  const [post, setPost] = React.useState(null);
+// layouts
+import RootLayout from "./layouts/Rootlayout";
 
-  React.useEffect(() => {
-    axios.get(URL).then((response) => {
-      setPost(response.data);
-    });
-  }, []);
+//path/URL and components/pages
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+      <Route index element={<Home />} />
+      <Route path="addspot" element={<CreateKiteSpot />} />
+      <Route path="login" element={<LogIn />} />
+      <Route path="signup" element={<LogIn />} />
+    </Route>
+  )
+);
 
-  if (!post) return null;
-
-  return (
-    <div>
-      <h1>{post.name}</h1>
-      <p>{post.address}</p>
-    </div>
-  );
+function App() {
+  return <RouterProvider router={router} />;
 }
+
+export default App;

@@ -3,50 +3,14 @@ const { validationResult } = require("express-validator");
 const getCoordinatesForKitespot = require("../util/location");
 const getConditionForKitespot = require("../util/condition");
 const KiteSpot = require("../models/kiteSpotModel");
+const User = require("../models/user");
+const mongoose = require("mongoose");
 
-//Dummy Kitespots
-let Dummy_Kitespots = [
-  {
-    id: "123",
-    name: "Tulum",
-    location: {
-      lat: 20.1766996,
-      lng: -87.5052612,
-    },
-    condition: "windy, lot of waves",
-    rating: "5-Stars",
-    comments: "sdsdsd",
-    user_id: "Elias123",
-  },
-  {
-    id: "456",
-    name: "Isla Blanca",
-    location: {
-      lat: 21.3830549,
-      lng: -86.8072441,
-    },
-    pictures: "dndbdgsn",
-    level: 2,
-    condition: "windy, flat water",
-    rating: "4.5-Stars",
-    comments: "dfdfdf",
-    user_id: "Ximena123",
-  },
-  {
-    id: "789",
-    name: "Cozumel",
-    location: {
-      lat: 20.432006,
-      lng: -87.0390633,
-    },
-    pictures: "sdsdsd",
-    level: 1,
-    condition: "windy",
-    rating: "3.5-Stars",
-    comments: "fesfggd",
-    user_id: "Elias123",
-  },
-];
+//get all kitespots
+const getKiteSpots = async (req, res) => {
+  const kitespots = await KiteSpot.find({});
+  res.status(200).json(kitespots);
+};
 
 // find KiteSpot by the ID of the KiteSpot
 const getKiteSpotByID = async (req, res, next) => {
@@ -133,10 +97,36 @@ const createKiteSpot = async (req, res, next) => {
     creator,
   });
 
+  let user;
   try {
-    await createdKiteSpot.save();
+    user = await User.findById(creator);
   } catch (err) {
-    const error = new HttpError("Could not created this KiteSpot.", 500);
+    const error = new HttpError(
+      "Creating KiteSpot failed, please try again",
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not find user for provided id", 404);
+    return next(error);
+  }
+
+  console.log(user);
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdKiteSpot.save({ session: sess });
+    user.kitespots.push(createdKiteSpot);
+    await user.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      "Creating Kitespot failed, please try again.",
+      500
+    );
     return next(error);
   }
 
@@ -148,29 +138,39 @@ const deleteKiteSpot = async (req, res, next) => {
   const spotId = req.params.sid;
   let spot;
   try {
-    spot = await KiteSpot.findById(spotId);
+    spot = await KiteSpot.findById(spotId).populate("creator");
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete the KiteSpot.",
       500
     );
+    return next(error);
+  }
+  if (!spot) {
+    const error = new HttpError("Could not find a Kitespot for this id.", 404);
     return next(error);
   }
 
   try {
-    await spot.remove();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await spot.remove({ session: sess });
+    spot.creator.kitespots.pull(spot);
+    await spot.creator.save({ session: sess });
+    await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete the KiteSpot.",
+      "Something went wrong, could not delete the Kitespot.",
       500
     );
     return next(error);
   }
 
-  res.status(200).json({ message: "Deleted the KiteSpot." });
+  res.status(200).json({ message: "Deleted Kitespot." });
 };
 
 exports.getKiteSpotByID = getKiteSpotByID;
 exports.getKiteSpotsByUserID = getKiteSpotsByUserID;
 exports.createKiteSpot = createKiteSpot;
 exports.deleteKiteSpot = deleteKiteSpot;
+exports.getKiteSpots = getKiteSpots;
