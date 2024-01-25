@@ -7,10 +7,12 @@
   --error: #e7195a;
 }
 body {
-  background: #454d66;
+  background: #1e1c1f;
   margin: 0;
   font-family: "Poppins";
 }
+
+/* Header */
 header {
   background: #309975;
 }
@@ -26,42 +28,61 @@ header a {
   color: #ffffff;
   text-decoration: none;
 }
+
+/* Pages */
 .pages {
   max-width: 1400px;
   padding: 20px;
   margin: 0 auto;
 }
 
-.workout-details {
+.kitespots {
+  position: relative;
+  justify-content: center;
+}
+
+.kitespot-details {
   background: #fff;
   border-radius: 4px;
-  margin: 20px 60px;
+  margin: 20px 200px;
   padding: 20px;
   position: center;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
-.workout-details h4 {
+
+.kitespot-details h4 {
   margin: 0 0 10px 0;
-  font-size: 1.2em;
-  color: var(--primary);
+  margin-top: 10px;
+  font-size: 1.5em;
+  color: #309975;
 }
-.workout-details p {
-  margin: 0;
+.kitespot-details p {
+  margin: 5px;
   font-size: 0.9em;
   color: #555;
 }
-.workout-details span {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+
+.delete-button {
+  padding: 10px;
+  position: relative;
+  margin-left: 800px;
+  background-color: #1aac83;
+  color: #1e1c1f;
+  border: 1px solid black;
+  border-radius: 4px;
   cursor: pointer;
-  background: #f1f1f1;
-  padding: 6px;
-  border-radius: 50%;
-  color: #333;
 }
 
-/* new workout form */
+/* new kitesurf form */
+
+.create {
+  color: #ffffff;
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
 label,
 input {
   display: block;
@@ -88,9 +109,13 @@ div.error {
   padding: 10px;
   background: #ffefef;
   border: 1px solid var(--error);
-  color: var(--error);
+  color: red;
   border-radius: 4px;
   margin: 20px 0;
+}
+
+input.error {
+  border: 1px solid var(--error);
 }
 
 /* Desktop Nav */
@@ -113,7 +138,7 @@ a {
 }
 
 a:hover {
-  color: grey;
+  color: #122620;
   text-decoration: underline;
   text-underline-offset: 1rem;
   text-decoration-color: rgb(185, 185, 185);
@@ -129,8 +154,8 @@ a:hover {
 
 /* Map */
 .leaflet-container {
-  width: 50px;
-  height: 50px;
+  width: 40%;
+  height: 40vh;
 }
 
 /* Actual Location */
@@ -148,3 +173,5 @@ a:hover {
   color: #ffffff;
   margin: 0;
 }
+
+/* Error Message */

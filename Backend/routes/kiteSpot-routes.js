@@ -17,6 +17,6 @@ router.get("/user/:uid", kiteSpotsController.getKiteSpotsByUserID);
 router.post("/", kiteSpotsController.createKiteSpot);
 
 //delete a Kitespot by ID
-router.delete("/sid", kiteSpotsController.deleteKiteSpot);
+router.delete("/:sid", kiteSpotsController.deleteKiteSpot);
 
 module.exports = router;

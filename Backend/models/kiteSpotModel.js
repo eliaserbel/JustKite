@@ -39,9 +39,8 @@ const kiteSpotSchema = new Schema(
       required: true,
     },
     creator: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "User",
     },
   },
   { timestamps: true }

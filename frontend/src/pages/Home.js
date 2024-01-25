@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useKiteSpotsContext } from "../hooks/useKiteSpotsContext";
 
 // components
 import KiteSpotDetails from "../components/KiteSpotDetails";
 import MyLocation from "../components/MyLocation";
 
 const Home = () => {
-  const [kiteSpots, setKiteSpots] = useState(null);
+  const { kitespots, dispatch } = useKiteSpotsContext();
 
   useEffect(() => {
     const fetchKiteSpots = async () => {
@@ -13,21 +14,21 @@ const Home = () => {
       const json = await response.json();
 
       if (response.ok) {
-        setKiteSpots(json);
+        dispatch({ type: "SET_KITESPOT", payload: json });
       }
     };
 
     fetchKiteSpots();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="home">
       <div>
         <MyLocation />
       </div>
-      <div className="workouts">
-        {kiteSpots &&
-          kiteSpots.map((kitespot) => (
+      <div className="kitespots">
+        {kitespots &&
+          kitespots.map((kitespot) => (
             <KiteSpotDetails kitespot={kitespot} key={kitespot.id} />
           ))}
       </div>
