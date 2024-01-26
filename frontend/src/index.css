@@ -44,9 +44,10 @@ header a {
 .kitespot-details {
   background: #fff;
   border-radius: 4px;
-  margin: 20px 200px;
+  margin: 20px 420px;
+  margin-right: 420px;
   padding: 20px;
-  position: center;
+  position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -57,20 +58,26 @@ header a {
   color: #309975;
 }
 .kitespot-details p {
-  margin: 5px;
+  margin: 0;
   font-size: 0.9em;
   color: #555;
 }
 
-.delete-button {
+.material-symbols-outlined {
   padding: 10px;
   position: relative;
-  margin-left: 800px;
-  background-color: #1aac83;
+  margin-left: 420px;
   color: #1e1c1f;
-  border: 1px solid black;
-  border-radius: 4px;
   cursor: pointer;
+}
+
+.kitespotaddress {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.kitespotlocation {
+  font-size: 1.1em;
 }
 
 /* new kitesurf form */
@@ -154,7 +161,7 @@ a:hover {
 
 /* Map */
 .leaflet-container {
-  width: 40%;
+  width: 95%;
   height: 40vh;
 }
 

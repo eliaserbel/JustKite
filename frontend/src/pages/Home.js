@@ -10,7 +10,9 @@ const Home = () => {
 
   useEffect(() => {
     const fetchKiteSpots = async () => {
-      const response = await fetch("/api/kiteSpots");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/kiteSpots`
+      );
       const json = await response.json();
 
       if (response.ok) {
